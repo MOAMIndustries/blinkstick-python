@@ -223,7 +223,7 @@ class BlinkStick(object):
     def _usb_ctrl_transfer(self, bmRequestType, bRequest, wValue, wIndex, data_or_wLength):
         if sys.platform == "win32":
             if bmRequestType == 0x20:
-                data = (c_ubyte * len(data_or_wLength))(*[c_ubyte(ord(c)) for c in data_or_wLength])
+                data = (c_ubyte * len(data_or_wLength))(*[c_ubyte(c) for c in data_or_wLength])
                 data[0] = wValue
                 if not self.device.send_feature_report(data):
                     if self._refresh_device():
@@ -535,7 +535,7 @@ class BlinkStick(object):
         @return: Number of LEDs
         """
 
-        device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0x81, 0, 2)
+        device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0xA, 0, 2)
 
         if len(device_bytes) >= 2:
             return device_bytes[1]
@@ -898,6 +898,16 @@ class BlinkStick(object):
 
         """
         return self._hex_to_rgb(self._name_to_hex(name))
+    def get_button(self):
+        """
+        Get the state of the button
+        """
+        device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0x000A, 0, 2)
+        if len(device_bytes) >= 2:
+            return device_bytes[1]
+        else:
+            return -1     
+    
 
 class BlinkStickPro(object):
     """
@@ -1055,6 +1065,7 @@ class BlinkStickPro(object):
 
         if self.b_led_count > 0:
             self.send_data(2)
+
 
 class BlinkStickProMatrix(BlinkStickPro):
     """
