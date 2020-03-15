@@ -1,0 +1,47 @@
+def _usb_ctrl_transfer(self, bmRequestType, bRequest, wValue, wIndex, data_or_wLength):
+
+set_color
+set_color self._usb_ctrl_transfer(0x20, 0x9, report_id, 0, control_string)
+
+set_info_block1
+self._usb_ctrl_transfer(0x20, 0x9, 0x0002, 0, self._data_to_message(data))
+
+set_info_block2
+self._usb_ctrl_transfer(0x20, 0x9, 0x0003, 0, self._data_to_message(data))
+
+set_led_data
+self._usb_ctrl_transfer(0x20, 0x9, report_id, 0, bytes(bytearray(report)))
+
+set_mode
+self._usb_ctrl_transfer(0x20, 0x9, 0x0004, 0, control_string)
+
+set_led_mode
+self._usb_ctrl_transfer(0x20, 0x9, 0x81, 0, control_string)
+
+get_mode
+device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0x0004, 0, 2)
+
+get_led_count
+device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0x81, 0, 2)
+
+get_info_block1
+device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0x0002, 0, 33)
+
+get_info_block2
+device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0x0003, 0, 33)
+
+get_rgb_color
+device_bytes = self._usb_ctrl_transfer(0x80 | 0x20, 0x1, 0x0001, 0, 33)
+
+
+commands - bmRequestType
+get 0x1 USBRQ_HID_GET_REPORT
+set 0x9 USBRQ_HID_SET_REPORT
+
+bRequest
+0x0081 Set LED Mode
+0x0002 Set Info Block 1
+0x0003 Set Info Block 2
+0x0004 Set Mode
+0x0081 Set LED Mode
+
